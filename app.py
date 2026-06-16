@@ -20,29 +20,30 @@ def _setup_r_env() -> None:
             os.environ["PATH"] = r_bin + ";" + os.environ.get("PATH", "")
 
     os.environ.setdefault("RPY2_CFFI_MODE", "ABI")
-    os.environ.pop("LC_ALL", None)
-    os.environ.pop("LANGUAGE", None)
+    os.environ["LC_ALL"] = "C.UTF-8"
+    os.environ["LANG"] = "C.UTF-8"
     os.environ.setdefault("R_ENVIRON_USER", "")   # 사용자 .Renviron 무시
 
     # 한국어 Windows에서 rpy2가 초기화 중 R 출력을 읽을 때
     # 디코딩 실패하는 문제를 패치로 방지한다.
-    import subprocess
-    _orig_check_output = subprocess.check_output
-    
-    def _safe_check_output(*args, **kwargs):
-        kwargs["errors"] = "replace"
-        if "encoding" not in kwargs:
-            kwargs["encoding"] = "cp949"
-        return _orig_check_output(*args, **kwargs)
+    if os.name == 'nt':
+        import subprocess
+        _orig_check_output = subprocess.check_output
         
-    subprocess.check_output = _safe_check_output
-    
-    _orig_run = subprocess.run
-    def _safe_run(cmd, *args, **kwargs):
-        if kwargs.get("text") and "encoding" not in kwargs:
-            kwargs["errors"] = kwargs.get("errors", "replace")
-        return _orig_run(cmd, *args, **kwargs)
-    subprocess.run = _safe_run
+        def _safe_check_output(*args, **kwargs):
+            kwargs["errors"] = "replace"
+            if "encoding" not in kwargs:
+                kwargs["encoding"] = "cp949"
+            return _orig_check_output(*args, **kwargs)
+            
+        subprocess.check_output = _safe_check_output
+        
+        _orig_run = subprocess.run
+        def _safe_run(cmd, *args, **kwargs):
+            if kwargs.get("text") and "encoding" not in kwargs:
+                kwargs["errors"] = kwargs.get("errors", "replace")
+            return _orig_run(cmd, *args, **kwargs)
+        subprocess.run = _safe_run
 
 _setup_r_env()
 # ────────────────────────────────────────────────────────────────────────────

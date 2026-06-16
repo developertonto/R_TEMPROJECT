@@ -184,7 +184,7 @@ process_water_quality_data <- function(df) {
 
 generate_wqi_boxplot <- function(df, png_path) {
   png(filename=png_path, width=800, height=500, res=110)
-  if (.Platform$OS.type == "windows") { par(mar=c(4, 4, 3, 2), family="Malgun Gothic") } else { par(mar=c(4, 4, 3, 2)) }
+  if (.Platform$OS.type == "windows") { par(mar=c(4, 4, 3, 2), family="Malgun Gothic") } else { par(mar=c(4, 4, 3, 2), family="NanumGothic") }
   
   if (nrow(df) == 0 || all(is.na(df$WQI))) {
     plot.new(); text(0.5, 0.5, "데이터가 없거나 WQI 점수가 모두 결측치입니다.", cex=1.2)
@@ -220,7 +220,7 @@ generate_wqi_boxplot <- function(df, png_path) {
 
 generate_do_temp_scatter <- function(df, png_path) {
   png(filename=png_path, width=800, height=500, res=110)
-  if (.Platform$OS.type == "windows") { par(mar=c(4, 4, 3, 2), family="Malgun Gothic") } else { par(mar=c(4, 4, 3, 2)) }
+  if (.Platform$OS.type == "windows") { par(mar=c(4, 4, 3, 2), family="Malgun Gothic") } else { par(mar=c(4, 4, 3, 2), family="NanumGothic") }
   
   if (nrow(df) == 0 || all(is.na(df$temperature)) || all(is.na(df$do_sat))) {
     plot.new(); text(0.5, 0.5, "시각화에 필요한 수온/산소포화도 데이터가 부족합니다.", cex=1.2)
