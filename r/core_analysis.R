@@ -69,17 +69,17 @@ process_water_quality_data <- function(df) {
     return(NA_character_)
   }
   
-  col_region <- find_col(c("region", "Region", "해역", "권역", "구역"), c("해역/연안별(1)"))
-  col_port <- find_col(c("port", "Port", "항만", "항", "항구", "지점"), c("해역/연안별(2)"))
-  col_date <- find_col(c("date", "Date", "일시", "측정일시", "측정일"))
+  col_region <- find_col(c("region", "Region", "해역", "권역", "구역", "해역/연안별(1)"), c("해역", "권역", "구역"))
+  col_port <- find_col(c("port", "Port", "항만", "항만명", "항구", "지점", "지점명", "조사지점", "정점", "연안", "해역/연안별(2)"), c("항만", "지점", "정점", "연안"))
+  col_date <- find_col(c("date", "Date", "일시", "측정일시", "측정일"), c("일시", "측정일", "일자"))
   col_temp <- find_col(c("temperature", "temp", "수온", "수온(℃)", "temperature(C)"), c("temp", "수온"))
   col_sal <- find_col(c("salinity", "염분", "염분(psu)"), c("sal", "염분"))
   col_ph <- find_col(c("ph", "pH"), c("ph"))
-  col_do <- find_col(c("do", "DO", "용존산소", "DO(mg/L)", "용존산소(DO)"), c("do"))
+  col_do <- find_col(c("do", "DO", "용존산소", "DO(mg/L)", "용존산소(DO)"), c("do", "용존산소"))
   
-  col_chla <- find_col(c("chla", "chl-a", "엽록소", "클로로필", "식물플랑크톤"), c("chl", "엽록소"))
-  col_din  <- find_col(c("din", "용존무기질소", "용존무기질소(DIN)"), c("din", "용존무기질소"))
-  col_dip  <- find_col(c("dip", "용존무기인", "용존무기인(DIP)"), c("dip", "용존무기인"))
+  col_chla <- find_col(c("chla", "chl-a", "엽록소", "클로로필", "식물플랑크톤"), c("chl", "엽록소", "클로로필"))
+  col_din  <- find_col(c("din", "용존무기질소", "용존무기질소(DIN)"), c("din", "용존무기질소", "무기질소"))
+  col_dip  <- find_col(c("dip", "용존무기인", "용존무기인(DIP)"), c("dip", "용존무기인", "무기인"))
   col_sd   <- find_col(c("sd", "투명도", "secchi"), c("투명도", "sd"))
   
   out <- df
