@@ -183,13 +183,17 @@ process_water_quality_data <- function(df) {
 }
 
 generate_wqi_boxplot <- function(df, png_path) {
-  png(filename=png_path, width=800, height=500, res=110)
-  if (.Platform$OS.type == "windows") { par(mar=c(4, 4, 3, 2), family="Malgun Gothic") } else { par(mar=c(4, 4, 3, 2), family="NanumGothic") }
+  if (.Platform$OS.type == "windows") {
+    png(filename=png_path, width=800, height=500, res=110)
+    par(mar=c(4, 4, 3, 2), family="Malgun Gothic")
+  } else {
+    png(filename=png_path, width=800, height=500, res=110, type="cairo")
+    par(mar=c(4, 4, 3, 2), family="NanumGothic")
+  }
   
   if (nrow(df) == 0 || all(is.na(df$WQI))) {
     plot.new(); text(0.5, 0.5, "데이터가 없거나 WQI 점수가 모두 결측치입니다.", cex=1.2)
   } else {
-    # 항상 3대 해역이 X축에 고정되도록 설정 (데이터에 특정 구역이 없어도 빈 자리로 표시됨)
     base_regions <- c("동해", "남해", "서해")
     extra_regions <- setdiff(unique(as.character(df$region)), c(base_regions, "기타"))
     if ("기타" %in% df$region) all_levels <- c(base_regions, "기타", extra_regions)
@@ -197,16 +201,13 @@ generate_wqi_boxplot <- function(df, png_path) {
     
     df$region <- factor(df$region, levels=all_levels)
     
-    # Y축 범위 동적 계산 (최소 18 ~ 최대값+10)
     max_wqi <- max(df$WQI, na.rm=TRUE)
     if (is.infinite(max_wqi) || is.na(max_wqi)) max_wqi <- 30
     y_upper <- max_wqi + 10
     y_lower <- 18
     
-    # 색상 배열 (기본 3개 + 기타 + 여분)
     my_colors <- c("#3498db", "#2ecc71", "#e67e22", "#95a5a6", rep("gray", length(extra_regions)))
     
-    # Boxplot 그리기
     boxplot(WQI ~ region, data=df,
             main="해역별 WQI 분포 (낮을수록 수질 양호)",
             xlab="해역 (Region)", ylab="WQI 지수",
@@ -219,8 +220,13 @@ generate_wqi_boxplot <- function(df, png_path) {
 }
 
 generate_do_temp_scatter <- function(df, png_path) {
-  png(filename=png_path, width=800, height=500, res=110)
-  if (.Platform$OS.type == "windows") { par(mar=c(4, 4, 3, 2), family="Malgun Gothic") } else { par(mar=c(4, 4, 3, 2), family="NanumGothic") }
+  if (.Platform$OS.type == "windows") {
+    png(filename=png_path, width=800, height=500, res=110)
+    par(mar=c(4, 4, 3, 2), family="Malgun Gothic")
+  } else {
+    png(filename=png_path, width=800, height=500, res=110, type="cairo")
+    par(mar=c(4, 4, 3, 2), family="NanumGothic")
+  }
   
   if (nrow(df) == 0 || all(is.na(df$temperature)) || all(is.na(df$do_sat))) {
     plot.new(); text(0.5, 0.5, "시각화에 필요한 수온/산소포화도 데이터가 부족합니다.", cex=1.2)
