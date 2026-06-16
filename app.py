@@ -20,8 +20,13 @@ def _setup_r_env() -> None:
             os.environ["PATH"] = r_bin + ";" + os.environ.get("PATH", "")
 
     os.environ.setdefault("RPY2_CFFI_MODE", "ABI")
-    os.environ["LC_ALL"] = "C.UTF-8"
-    os.environ["LANG"] = "C.UTF-8"
+    if os.name != 'nt':
+        os.environ["LC_ALL"] = "C.UTF-8"
+        os.environ["LANG"] = "C.UTF-8"
+    else:
+        os.environ.pop("LC_ALL", None)
+        os.environ.pop("LANG", None)
+        os.environ.pop("LANGUAGE", None)
     os.environ.setdefault("R_ENVIRON_USER", "")   # 사용자 .Renviron 무시
 
     # 한국어 Windows에서 rpy2가 초기화 중 R 출력을 읽을 때
